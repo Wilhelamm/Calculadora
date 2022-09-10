@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">02 Activitys</string>
+    <string name="meu_texto_vazio"></string>
+    <string name="m_C">C</string>
+    <string name="m_inverter">X</string>
+    <string name="m_porcento">%</string>
+    <string name="m_divide">/</string>
+</resources>
