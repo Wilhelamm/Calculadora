@@ -53,10 +53,10 @@ class MainActivity : AppCompatActivity() {
         //Operadores
         buttonLimpar.setOnClickListener { textViewVisor.text = "" }
         buttonExcluir.setOnClickListener { excluirValor(textViewVisor.text.toString()) }
-        buttonDividir.setOnClickListener { adicionarValor(" / "); }
-        buttonMultiplicar.setOnClickListener { adicionarValor(" * "); }
-        buttonSomar.setOnClickListener { adicionarValor(" + "); }
-        buttonSubtrair.setOnClickListener { adicionarValor(" - "); }
+        buttonDividir.setOnClickListener { adicionarValor("/"); }
+        buttonMultiplicar.setOnClickListener { adicionarValor("*"); }
+        buttonSomar.setOnClickListener { adicionarValor("+"); }
+        buttonSubtrair.setOnClickListener { adicionarValor("-"); }
         buttonIgual.setOnClickListener { resultado(textViewVisor.text.toString()); }
         buttonVirgula.setOnClickListener { adicionarValor(","); }
 
@@ -81,18 +81,36 @@ class MainActivity : AppCompatActivity() {
 
     fun adicionarValor(valor: String) {
         var expressao: TextView = findViewById(R.id.textViewVisor);
-        expressao.append(valor);
+
+        if ((valor.contains("/") || valor.contains("*") || valor.contains("-") || valor.contains("+"))
+            && (expressao.text.isNotBlank())
+            && ((expressao.text.substring(expressao.text.length -1) == "/") || (expressao.text.substring(expressao.text.length -1) == "*") || (expressao.text.substring(expressao.text.length -1) == "-") || (expressao.text.substring(expressao.text.length -1) == "+"))) {
+            expressao.text = expressao.text.substring(0,expressao.text.length -1) + expressao.text.toString().replace(expressao.text.toString(),valor);
+        } else {
+            expressao.append(valor);
+        }
     }
 
     fun resultado(string: String) {
         var textViewVisor: TextView = findViewById(R.id.textViewVisor);
         var resultado: TextView = findViewById(R.id.textViewHistorico);
 
-        var x = ExpressionBuilder(string.replace(",", ".")).build().evaluate();
+        if (string.isNotBlank()
+            && !string.contains("/0")
+            && string.substring(string.length -1) != "/"
+            && string.substring(string.length -1) != "*"
+            && string.substring(string.length -1) != "-"
+            && string.substring(string.length -1) != "+"
+            && string.substring(0, 1) != "/"
+            && string.substring(0, 1) != "*"
+            && string.substring(0, 1) != "-"
+            && string.substring(0, 1) != "+") {
+            var x = ExpressionBuilder(string.replace(",", ".")).build().evaluate();
 
-        resultado.text = resultado.text.toString() + "\r\n" + "$string = $x";
+            resultado.text = resultado.text.toString() + "\r\n" + "$string = $x";
 
-        textViewVisor.text = x.toString();
+            textViewVisor.text = x.toString();
+        }
     }
 
 }
